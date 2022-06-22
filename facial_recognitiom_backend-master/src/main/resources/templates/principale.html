@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="template">
+<head>
+    <meta charset="UTF-8">
+    <title>Listes d'absence</title>
+</head>
+<body>
+ <div layout:fragment="content1">
+  <div class="container mt-2">
+     <div class="card-header">Prise d'absence</div>
+     <div class="card-body text-center">
+         <form method="get" th:action="@{/admin/form}">
+             <label><strong>Entrez la date</strong></label>
+             <input type="date" name="d" th:value="${date}">
+             <br>
+             <br>
+             <label><strong>Heure de debut</strong></label>
+             <input type="time" name="t1" th:value="${t1}">
+             <label style="margin-left: 15px"><strong>Heure de fin</strong></label>
+             <input type="time" name="t2" th:value="${t2}">
+             <input type="hidden" name="aff" th:value="true"> <br>
+             <button type="submit" class="btn btn-success mt-2 "><strong>Chercher</strong></button>
+         </form>
+
+
+
+
+         <div th:if="${aff=='true'}">
+
+             <div th:if="${erreur!=''}">
+                 <div class="card card-body mt-2 mb-2 text-center">
+                     <h4 th:text="${date1}" class="fw-bold"></h4>
+                     <h5 th:text="${time}" class="fw-bold"></h5>
+                 </div>
+                 <h4 th:text="${erreur}" class="fw-bold text-danger"></h4> <hr>
+             </div>
+         <div th:if="${erreur==''}"  >
+             <div class="card card-body mt-2 mb-2 text-center">
+                 <h4 th:text="${date1}" class="fw-bold"></h4> <hr>
+                 <h5 th:text="${time}" class="fw-bold"></h5>
+             </div>
+
+             <div class="row">
+                 <div class="col-md-6">
+                     <div class="card">
+                         <div class="card-header">
+                             <h5 class="fw-bold">Liste complète</h5>
+                         </div>
+                         <div class="card-body">
+                             <table class="table">
+                                 <thead>
+                                 <tr>
+                                     <th>Nom</th>
+                                     <th>Prénom(s)</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                 <tr  th:each="p:${presentAndAbsents}" th:class="${p.getEtat().toString()=='ABSENT'}? 'bg-danger text-white':''">
+                                     <td th:text="${p.getLastname()}"></td>
+                                     <td th:text="${p.getFirstname()}"></td>
+                                     <td  th:text="${p.getEtat()}"></td>
+                                 </tr>
+                                 </tbody>
+                             </table>
+                         </div>
+                     </div>
+
+                 </div>
+                 <div class="col-md-6">
+                     <div class="card">
+                         <div class="card-header">
+                            <h5 class="fw-bold">Listes separées : Présents et Absents</h5>
+                         </div>
+                         <div class="card-body">
+                             <strong>PRESENTS</strong>
+                             <table class="table mb-5">
+                                 <thead>
+                                 <tr>
+                                     <th>Nom</th>
+                                     <th>Prénom(s)</th>
+                                     <th>Arrivée</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                 <tr  th:each="p:${presents}">
+                                     <td th:text="${p.getStudent().getLastname()}"></td>
+                                     <td th:text="${p.getStudent().getFirstname()}"></td>
+                                     <td  th:text="${p.getDate().toString()}"></td>
+                                 </tr>
+                                 </tbody>
+                             </table>
+                             <strong>ABSENTS</strong>
+                             <table class="table">
+                                 <thead>
+                                 <tr>
+                                     <th>Nom</th>
+                                     <th>Prénom(s)</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                 <tr  th:each="p:${absents}">
+                                     <td th:text="${p.getLastname()}"></td>
+                                     <td th:text="${p.getFirstname()}"></td>
+                                 </tr>
+
+                                 </tbody>
+
+                             </table>
+                         </div>
+                     </div>
+
+                 </div>
+             </div>
+
+         </div>
+         </div>
+       <!--  <table class="table">
+             <thead>
+             <tr>
+                 <th>ID</th>
+                 <th>Nom</th>
+                 <th>Date</th>
+                 <th>Malade</th>
+                 <th>Score</th>
+             </tr>
+             </thead>
+             <tbody>
+             <tr th:each="p:${listPatients}">
+                 <td th:text="${p.id}"></td>
+                 <td th:text="${p.nom}"></td>
+                 <td th:text="${p.dateNaissance}"></td>
+                 <td th:text="${p.malade}"></td>
+                 <td th:text="${p.score}"></td>
+                 <td sec:authorize="hasAuthority('ADMIN')">
+                     <a onclick="return confirm('Etes vous sure?')" class="btn btn-danger" th:href="@{/admin/delete(id=${p.id}, keyword=${keyword}, page=${currentPage})}">
+                         Delete
+                     </a>
+                 </td>
+                 <td sec:authorize="hasAuthority('ADMIN')">
+                     <a class="btn btn-success" th:href="@{/admin/editPatient(id=${p.id}, keyword=${keyword}, page=${currentPage})}">
+                         Edit
+                     </a>
+                 </td>
+             </tr>
+
+             </tbody>
+         </table>-->
+
+
+         <!--<ul class="nav nav-pills">
+         <li th:each="page,status:${pages}">
+             <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
+                th:text="${status.index}"
+             th:href="@{/user/index(page=${status.index}, keyword=${keyword})}"
+             ></a>
+         </li>
+         </ul>-->
+
+     </div>
+  </div>
+ </div>
+</body>
+</html>
